@@ -1,4 +1,5 @@
 'use strict';
+var _ = require('underscore')
 var https = require('https');
 var util = require('util');
 var os = require('os');
@@ -18,7 +19,7 @@ var METHOD_SEND_MESSAGE = 'sendMessage';
 
 
 // read params
-var homeDir = (process.env.HOME || process.env.USERPROFILE) + '/.quoteBot/';
+var homeDir = (process.env.HOME || process.env.USERPROFILE) + '/.quote-bot/';
 var params = require(homeDir + 'conf.json');
 l('read params:');
 lo(params);
@@ -26,12 +27,12 @@ lo(params);
 
 
 // read quotes
-var rusQuotes = fs.readFileSync(homeDir + 'ru').toString().trimRight().split(os.EOL);
-var rusQuotesLength = rusQuotes.length;
-var engQuotes = fs.readFileSync(homeDir + 'en').toString().trimRight().split(os.EOL);
-var engQuotesLength = engQuotes.length;
-
-
+var quote = {}
+_.each(['en', 'ru'], function (ln) {
+  quote[ln] = fs.readFileSync(homeDir + ln + '2', {encoding: 'utf8'}).split(os.EOL)
+  quote[ln] = _.filter(quote[ln], function (d) {return /^\*/.test(d)})
+  quote[ln] = _.map(quote[ln], function (d) {return d.replace(/^\*/, '')})
+})
 
 function setWebhook () {
   https.get(util.format('%s%s/%s?url=%s', params.apiUrl, params.apiKey, METHOD_SET_WEBHOOK, params.webHookUrl), function(res) {
@@ -84,19 +85,11 @@ function processUpdate(update) {
 
 
 
-function getRandomQuote(msgText) {
-  var quotes;
-  var length;
-  if (/[а-яА-Я]/.test(msgText)) {
-    quotes = rusQuotes;
-    length = rusQuotesLength;
-  }
-  else {
-    quotes = engQuotes;
-    length = engQuotesLength;
-  }
-
-  return quotes[Math.floor(Math.random() * quotes.length)];
+function getRandomQuote (msgText) {
+  var ln = 'en'
+  if (/[а-яА-Я]/.test(msgText))
+    ln = 'ru'
+  return _.sample(quote[ln])
 }
 
 
