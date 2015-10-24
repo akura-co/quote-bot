@@ -5,6 +5,13 @@ var util = require('util');
 var os = require('os');
 var fs = require('fs');
 
+var home
+try {
+  home = __dirname.match(/^\/home\/[^\/]+/)[0]
+} catch (e) {
+  home = '/home/ubuntu'
+}
+
 // helpers
 var l = console.log;
 var e = console.error;
@@ -19,7 +26,7 @@ var METHOD_SEND_MESSAGE = 'sendMessage';
 
 
 // read params
-var homeDir = (process.env.HOME || process.env.USERPROFILE) + '/.quote-bot/';
+var homeDir = home + '/.quote-bot/';
 var params = require(homeDir + 'conf.json');
 l('read params:');
 lo(params);
