@@ -78,6 +78,8 @@ function setWebhook () {
 
 
 function processUpdate(update) {
+  if (!update.message)
+    return;
   l();
   l('processUpdate');
   lo(update);
