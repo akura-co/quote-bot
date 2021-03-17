@@ -2,11 +2,8 @@
   "name": "quote-bot",
   "version": "0.0.2",
   "description": "Telegram quotes bot",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "license": "MIT",
   "dependencies": {
-    "underscore": "1.8.3"
+    "underscore": "1.12.1"
   }
 }
