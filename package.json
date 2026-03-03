@@ -4,6 +4,6 @@
   "description": "Telegram quotes bot",
   "license": "MIT",
   "dependencies": {
-    "underscore": "1.12.1"
+    "underscore": "1.13.8"
   }
 }
